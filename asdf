@@ -1,49 +1,148 @@
-package medium;
-import java.util.*;
-public class UsernameValidation {
+package Medium;
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
 
-	public static void main(String[] args) {
-		
-		String username; 
-		
-		System.out.println("Enter the username");
-		Scanner sc= new Scanner(System.in);
-		
-		username= sc.nextLine();
-		
-		char[] ch= username.toCharArray();
-		
-		//System.out.println(ch[0]);
-		
-		int len= ch.length;
-		
-		for(int i=0; i<len;i++)
-		{
-			// System.out.println(ch[i]);
-			
-			
-			if((ch[0]>='a' && ch[0]<= 'z') || (ch[0]>='A' && ch[0]<= 'Z') )
-			{
-				if((ch[i]>='a' && ch[i]<= 'z') || (ch[i]>='A' && ch[i]<= 'Z') || (ch[i]>=0 && ch[i]<= 9) || (ch[i]=='_') )
-					{
-						System.out.println("Valid Username");
-					}
-				else
-					System.out.println("Please Enter A Valid username");
-					break;
-			}
-			else
-				System.out.println("First Character Must Be Alphabetic");
-				break;
-		}
-		
-/*		if( )
-		{
-			System.out.println("Valid username");
-		}
-		else 
-			System.out.println("Invalid username");
-*/
-	} 
+ 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 
+ 
+public class DataMasking {
+     
+    public static void main(String[] args) throws IOException {
+    	
+         generateCsvFile();
+         run();
+         
+    }
+    public static void run() {
+ 
+        String csvFile = "d:/Read.csv";
+        String[][] arrayStrings=new String[1001][5];
+         
+        BufferedReader br = null;
+        String line = "";
+        String cvsSplitBy = ",";
+        try {
+ 
+            br = new BufferedReader(new FileReader(csvFile));
+            int i=0;
+            while ((line = br.readLine()) != null) {
+           arrayStrings[i]= line.split(cvsSplitBy);
+                i++;
+                if(i==1001)
+                {
+                    i=0;
+                    generateCsvFile(arrayStrings);
+                }
+            
+            }
+ 
+   } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+      
+    }
+     
+    private static void generateCsvFile()
+   {
+    try
+    {
+        FileWriter writer = new FileWriter("D:/Write.csv",false);
+        writer.flush();
+        writer.close();
+    }
+    catch(IOException e)
+    {
+         e.printStackTrace();
+    } 
+    }
+     
+     
+     private static void generateCsvFile(String[][] values)
+   {
+    try
+    {
+        FileWriter writer = new FileWriter("D:/Write.csv",true);
+  
+             
+        writer.append(values[0][0]);
+        
+        writer.append(',');
+            writer.append(values[0][1]);
+        writer.append(',');
+            writer.append(values[0][2]);
+        writer.append(',');
+            writer.append(values[0][3]);
+        writer.append(','); 
+            writer.append(values[0][4]);
+        
+            writer.append('\n');
+       
+             for(int i=1;i<1001;i++)
+             {
+            
+            	 String Duplicate = values[i][0];
+            	 int length = Duplicate.length();
+            	 char[] stringToCharArray = Duplicate.toCharArray();
+            	 char[] stringSecond = new char[4];
+            	for(int j=0;j<length-2;j++)
+            	{
+            		stringToCharArray[j] = '*';
+            	}
+            	int k=0;
+            	for(int j=length-2;j<length;j++)
+            	{
+            		stringSecond[k] =stringToCharArray[j];
+            		k++;
+            	}
+            	
+            	StringBuilder sb = new StringBuilder();
+            	sb.append(stringToCharArray);
+            	sb.append(stringSecond);
+            	values[i][0]=sb.toString();
+            writer.append(values[i][0]);
+            
+        writer.append(',');
+            writer.append(values[i][1]);
+        writer.append(',');
+            writer.append(values[i][2]);
+        writer.append(',');
+            writer.append(values[i][3]);
+        writer.append(','); 
+            writer.append(values[i][4]);
+        
+            writer.append('\n');
+             }
+    
+        
+           
+        //generate whatever data you want
+  
+        writer.flush();
+        writer.close();
+    }
+    catch(IOException e)
+    {
+         e.printStackTrace();
+    } 
+     
+   }
 }
+
+
